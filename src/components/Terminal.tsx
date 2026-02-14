@@ -98,7 +98,7 @@ export function Terminal() {
           <div className="w-3 h-3 rounded-full bg-green-500/80" />
         </div>
         <span className="text-xs text-gray-500 ml-2">
-          Multiverse Agency Terminal
+          Terminal
         </span>
       </div>
 
@@ -120,7 +120,7 @@ export function Terminal() {
       {/* Input line */}
       <form onSubmit={handleSubmit} className="flex items-center px-4 py-3 border-t border-gray-800/50">
         <span className="text-terminal-prompt mr-2 shrink-0 text-xs">
-          agent@agency:{cwd}$
+          user@dev:{cwd}$
         </span>
         <input
           ref={inputRef}

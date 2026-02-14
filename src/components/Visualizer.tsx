@@ -215,7 +215,7 @@ export function Visualizer() {
       <div className="flex items-center gap-2 px-4 py-2 bg-gray-900/80 border-b border-gray-800">
         <div className="w-2 h-2 rounded-full bg-portal-purple animate-pulse" />
         <span className="text-xs text-gray-500">
-          Multiverse Visualizer
+          File System View
         </span>
         <span className="ml-auto text-[10px] text-gray-600 font-mono">
           ~/  (Home Directory)

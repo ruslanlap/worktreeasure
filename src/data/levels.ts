@@ -3,58 +3,85 @@ import type { Level, GameState } from '../engine/types';
 export const levels: Level[] = [
   {
     id: 1,
-    title: 'Level 1: The Trap',
-    lore: `You're Agent 42, deep inside the "feature-hoverboard" dimension, writing critical hover-propulsion code. Your files are modified but NOT committed yet.
+    title: 'Scenario 1: The Everyday Problem',
+    lore: `You're working on a new auth feature (branch "feature/auth"). You've changed login.ts and api.ts but haven't committed yet — you're mid-thought.
 
-Suddenly, an alert from HQ: "CRITICAL BUG on main! The gravity inverter is malfunctioning. Citizens are floating away. Fix it NOW."
+Suddenly, your teammate pings you: "Production is broken — the payment form crashes on submit. Can you hotfix it on main RIGHT NOW?"
 
-Your instinct? Switch to main. But wait...`,
-    task: 'Try switching to the main branch. Type: `git checkout main`',
-    hint: 'Just type the command exactly as shown. See what happens when you have uncommitted changes!',
+Your instinct — switch to main. Let's try it.
+
+💡 This happens ALL the time in real development. You're deep in a feature, and something urgent comes up.`,
+    task: 'Try switching to main: `git checkout main`',
+    hint: 'Just type the command. You\'ll see what happens when you have uncommitted work.',
     validationCommand: 'git checkout main',
     validate: (state: GameState) =>
       state.lastCommand === 'git checkout main',
   },
   {
     id: 2,
-    title: 'Level 2: Opening the Portal',
-    lore: `The checkout was BLOCKED! Your uncommitted hoverboard code would be destroyed.
+    title: 'Scenario 2: Worktree to the Rescue',
+    lore: `Blocked! Git won't let you switch — your uncommitted changes would be lost.
 
-In the old days, you'd have to stash, commit, or lose your work. But you're a Multiverse Agent. You have a portal gun: \`git worktree\`.
+The usual options suck:
+• git stash — easy to forget, messy with conflicts
+• commit WIP code — pollutes history
+• clone the repo again — wastes disk space and time
 
-A worktree creates a SECOND physical folder linked to the same repo, checked out on a different branch. Two dimensions. One reality.`,
-    task: 'Open a portal! Type: `git worktree add ../urgent-fix main`',
-    hint: 'This creates a new folder called "urgent-fix" alongside your repo, checked out on the "main" branch.',
-    validationCommand: 'git worktree add ../urgent-fix main',
+git worktree is the real solution. It creates a SECOND folder on your disk, checked out on a different branch, but linked to the SAME repository. Same commits, same history, same remote.
+
+Think of it this way: right now you have one folder open in VS Code. After worktree add, you'll have TWO folders — each on a different branch. You can open them in separate windows and work in parallel.`,
+    task: 'Create a worktree: `git worktree add ../hotfix main`',
+    hint: 'This creates a real folder "../hotfix" checked out on main. Your current folder stays untouched on feature/auth.',
+    validationCommand: 'git worktree add ../hotfix main',
     validate: (state: GameState) =>
-      state.worktrees.some((w) => w.folderName === 'urgent-fix'),
+      state.worktrees.some((w) => w.folderName === 'hotfix'),
   },
   {
     id: 3,
-    title: 'Level 3: Dimension Hop',
-    lore: `BOOM! Look at the Multiverse Visualizer on the right. A new folder "urgent-fix" just materialized! It's on the "main" branch, completely clean, while your "core-repo" still has your dirty hoverboard files safe and sound.
+    title: 'Scenario 3: Working in Parallel',
+    lore: `Done! Now you have two folders:
+📁 my-project/ → branch feature/auth (your uncommitted changes are safe)
+📁 hotfix/     → branch main (clean, ready to fix the bug)
 
-Now hop through the portal into the new dimension.`,
-    task: 'Navigate into the new worktree. Type: `cd ../urgent-fix`\nThen verify you\'re on main: `git status`',
-    hint: 'Use "cd ../urgent-fix" to enter the portal, then "git status" to confirm you\'re on main.',
+KEY INSIGHT: Both folders point to the SAME repo. If you commit in hotfix/, the commit exists in the repo — you can see it from my-project/ too. It's not a copy, it's a parallel view.
+
+Real-world use cases:
+• Fix production bugs without stashing your feature work
+• Run tests on main while developing on a feature branch
+• Let an AI agent (Claude Code) work in a worktree while you code in another
+• Review a teammate's PR in a separate worktree — no context switching
+
+Now jump into the hotfix folder and verify you're on main.`,
+    task: 'Enter the worktree: `cd ../hotfix`\nThen check the branch: `git status`',
+    hint: 'cd ../hotfix to enter the folder, then git status to confirm you\'re on main with a clean working tree.',
     validationCommand: 'git status',
     validate: (state: GameState) =>
-      state.cwd === '~/urgent-fix' &&
+      state.cwd === '~/hotfix' &&
       state.lastCommand === 'git status',
   },
   {
     id: 4,
-    title: 'Level 4: Closing the Portal',
-    lore: `You're in! "git status" confirms: branch main, clean working tree. You can fix the gravity inverter here without disturbing your hoverboard code AT ALL.
+    title: 'Scenario 4: Clean Up',
+    lore: `You're on main with a clean tree. You'd fix the bug here, commit, push, and deploy — all while your feature/auth work sits untouched in the other folder.
 
-Imagine you just fixed the bug, committed, and pushed. Mission complete. Now it's time to clean up -- close the portal and remove the worktree.
+When you're done, just remove the worktree. This ONLY deletes the folder — your commits, branches, and history are all safe in the repo.
 
-First, hop back to your original dimension.`,
-    task: 'Return home: `cd ../core-repo`\nThen close the portal: `git worktree remove ../urgent-fix`',
-    hint: 'First cd back to core-repo, then use "git worktree remove ../urgent-fix" to clean up.',
-    validationCommand: 'git worktree remove ../urgent-fix',
+FAQ:
+Q: Do changes in a worktree affect the main repo?
+A: Yes! It's the SAME repo. Commits made in any worktree are shared.
+
+Q: Is it better than git clone?
+A: Much better — no duplicate .git, no separate remote config, shared object store.
+
+Q: Can I have multiple worktrees?
+A: Yes! One per branch. Great for juggling feature, hotfix, and review work.
+
+Now go back to your project and clean up the worktree.`,
+    task: 'Return: `cd ../my-project`\nThen clean up: `git worktree remove ../hotfix`',
+    hint: 'First cd ../my-project, then git worktree remove ../hotfix. The folder disappears, but all commits remain.',
+    validationCommand: 'git worktree remove ../hotfix',
     validate: (state: GameState) =>
       state.worktrees.length === 1 &&
-      state.cwd === '~/core-repo',
+      state.cwd === '~/my-project',
   },
 ];
