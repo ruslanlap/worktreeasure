@@ -12,41 +12,43 @@ const mkLine = (
   text,
 });
 
-/** Initial files in the core-repo worktree */
-const coreRepoFiles = [
-  { name: 'hover-propulsion.ts', type: 'file' as const, dirty: true },
-  { name: 'anti-gravity.ts', type: 'file' as const, dirty: true },
+/** Initial files in the project worktree (feature/auth branch) */
+const projectFiles = [
+  { name: 'login.ts', type: 'file' as const, dirty: true },
+  { name: 'api.ts', type: 'file' as const, dirty: true },
+  { name: 'package.json', type: 'file' as const },
   { name: 'README.md', type: 'file' as const },
   {
     name: 'src',
     type: 'directory' as const,
     children: [
-      { name: 'index.ts', type: 'file' as const },
-      { name: 'portal-gun.ts', type: 'file' as const },
+      { name: 'app.ts', type: 'file' as const },
+      { name: 'auth.ts', type: 'file' as const },
+      { name: 'payments.ts', type: 'file' as const },
     ],
   },
 ];
 
 /** Files that appear in the main branch worktree */
 const mainBranchFiles = [
-  { name: 'gravity-inverter.ts', type: 'file' as const },
+  { name: 'package.json', type: 'file' as const },
   { name: 'README.md', type: 'file' as const },
   {
     name: 'src',
     type: 'directory' as const,
     children: [
-      { name: 'index.ts', type: 'file' as const },
-      { name: 'portal-gun.ts', type: 'file' as const },
+      { name: 'app.ts', type: 'file' as const },
+      { name: 'payments.ts', type: 'file' as const },
     ],
   },
 ];
 
 const initialWorktrees: Worktree[] = [
   {
-    path: '~/core-repo',
-    branch: 'feature-hoverboard',
-    folderName: 'core-repo',
-    files: coreRepoFiles,
+    path: '~/my-project',
+    branch: 'feature/auth',
+    folderName: 'my-project',
+    files: projectFiles,
     dirty: true,
     isMain: true,
   },
@@ -59,45 +61,45 @@ interface GitEngineStore extends GameState {
 }
 
 export const useGitEngine = create<GitEngineStore>((set, get) => ({
-  cwd: '~/core-repo',
+  cwd: '~/my-project',
   worktrees: initialWorktrees,
   terminalHistory: [
     mkLine(
       'info',
-      '// MULTIVERSE AGENCY TERMINAL v2.0 //',
+      '~ Git Worktree Playground ~',
     ),
-    mkLine('info', '// Type commands to interact with the Git Multiverse //'),
+    mkLine('info', 'Type "help" for commands. Follow the scenarios on the left.'),
     mkLine('info', ''),
   ],
   currentLevel: 0,
   levelComplete: false,
   gameComplete: false,
-  lockedBranches: ['feature-hoverboard'],
+  lockedBranches: ['feature/auth'],
   lastCommand: '',
 
   resetGame: () => {
     lineId = 0;
     set({
-      cwd: '~/core-repo',
+      cwd: '~/my-project',
       worktrees: [
         {
-          path: '~/core-repo',
-          branch: 'feature-hoverboard',
-          folderName: 'core-repo',
-          files: coreRepoFiles,
+          path: '~/my-project',
+          branch: 'feature/auth',
+          folderName: 'my-project',
+          files: projectFiles,
           dirty: true,
           isMain: true,
         },
       ],
       terminalHistory: [
-        mkLine('info', '// MULTIVERSE AGENCY TERMINAL v2.0 //'),
-        mkLine('info', '// Type commands to interact with the Git Multiverse //'),
+        mkLine('info', '~ Git Worktree Playground ~'),
+        mkLine('info', 'Type "help" for commands. Follow the scenarios on the left.'),
         mkLine('info', ''),
       ],
       currentLevel: 0,
       levelComplete: false,
       gameComplete: false,
-      lockedBranches: ['feature-hoverboard'],
+      lockedBranches: ['feature/auth'],
       lastCommand: '',
     });
   },
@@ -120,7 +122,7 @@ export const useGitEngine = create<GitEngineStore>((set, get) => ({
     const { cwd, worktrees, terminalHistory } = state;
 
     // Build prompt string
-    const prompt = `agent@agency:${cwd}$ ${trimmed}`;
+    const prompt = `user@dev:${cwd}$ ${trimmed}`;
     const newHistory = [...terminalHistory, mkLine('input', prompt)];
 
     const addOutput = (type: TerminalLine['type'], text: string) => {
@@ -338,9 +340,9 @@ function handleGit(
     return;
   } else if (sub === 'branch') {
     addOutput('output', '  main');
-    addOutput('success', '* feature-hoverboard');
+    addOutput('success', '* feature/auth');
     if (worktrees.some((w) => w.branch === 'main')) {
-      addOutput('output', '  (main is checked out in a linked worktree)');
+      addOutput('output', '  + main (checked out in a linked worktree)');
     }
   } else {
     addOutput(
@@ -424,7 +426,7 @@ function handleWorktree(
     };
 
     addOutput('success', `Preparing worktree (checking out '${branchArg}')`);
-    addOutput('success', `HEAD is now at a1b2c3d Portal calibration complete`);
+    addOutput('success', `HEAD is now at a1b2c3d Latest commit on ${branchArg}`);
 
     set({
       worktrees: [...worktrees, newWorktree],

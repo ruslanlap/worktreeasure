@@ -17,34 +17,38 @@ export function NarrativeBox() {
         className="rounded-lg border border-portal-green/40 bg-portal-green/5 p-5"
       >
         <h2 className="text-lg font-bold text-portal-green mb-2">
-          MISSION COMPLETE
+          You've got it!
         </h2>
         <p className="text-sm text-gray-300 leading-relaxed mb-3">
-          Outstanding work, Agent 42. You've mastered the Portal Gun
-          (<code className="text-portal-purple">git worktree</code>).
-          You can now exist in multiple dimensions simultaneously --
-          no more stashing, no more context-switching headaches.
+          Now you know <code className="text-portal-purple">git worktree</code> — no more stashing, no more WIP commits, no more cloning the repo again.
         </p>
         <div className="text-xs text-gray-500 space-y-1 mb-4">
-          <p>Key takeaways:</p>
+          <p className="font-semibold text-gray-400">Cheat sheet:</p>
           <p>
-            &bull; <code>git worktree add &lt;path&gt; &lt;branch&gt;</code>{' '}
-            -- creates a new working directory on a different branch
+            &bull; <code>git worktree add ../folder branch</code>{' '}
+            — open a second folder on another branch
           </p>
           <p>
             &bull; <code>git worktree list</code>{' '}
-            -- shows all active worktrees
+            — see all active worktrees
           </p>
           <p>
-            &bull; <code>git worktree remove &lt;path&gt;</code>{' '}
-            -- cleans up a linked worktree
+            &bull; <code>git worktree remove ../folder</code>{' '}
+            — delete the folder (commits stay safe)
           </p>
+          <p className="mt-2 font-semibold text-gray-400">When to use it:</p>
+          <p>&bull; Urgent hotfix while mid-feature</p>
+          <p>&bull; PR review without losing your context</p>
+          <p>&bull; AI agent working in parallel (e.g. Claude Code in a worktree)</p>
+          <p>&bull; Running tests on one branch while coding on another</p>
+          <p className="mt-2 font-semibold text-gray-400">Key fact:</p>
+          <p>&bull; All worktrees share the same .git — commits made anywhere are visible everywhere</p>
         </div>
         <button
           onClick={resetGame}
           className="px-4 py-2 text-xs font-mono rounded-md border border-portal-purple/40 bg-portal-purple/10 text-portal-purple hover:bg-portal-purple/20 transition-colors cursor-pointer"
         >
-          Restart Mission
+          Start Over
         </button>
       </motion.div>
     );
@@ -94,7 +98,7 @@ export function NarrativeBox() {
           {/* Task box */}
           <div className="rounded-md border border-portal-blue/30 bg-portal-blue/5 p-3">
             <p className="text-[10px] uppercase tracking-wider text-portal-blue/70 mb-1">
-              Mission Objective
+              Your turn
             </p>
             <p className="text-sm text-portal-blue font-mono whitespace-pre-line">
               {level.task}
@@ -123,17 +127,17 @@ export function NarrativeBox() {
                 <div className="rounded-md border border-portal-green/40 bg-portal-green/10 p-3 flex items-center justify-between">
                   <div>
                     <p className="text-sm font-semibold text-portal-green">
-                      Objective Complete!
+                      Got it!
                     </p>
                     <p className="text-xs text-gray-400 mt-0.5">
-                      Portal stabilized. Proceed to next dimension.
+                      Nice work. Ready for the next scenario?
                     </p>
                   </div>
                   <button
                     onClick={advanceLevel}
                     className="px-4 py-2 text-xs font-mono rounded-md bg-portal-green/20 border border-portal-green/40 text-portal-green hover:bg-portal-green/30 transition-colors cursor-pointer"
                   >
-                    Next Level
+                    Next Scenario
                   </button>
                 </div>
               </motion.div>

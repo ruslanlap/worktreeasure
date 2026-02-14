@@ -28,11 +28,11 @@ function App() {
           </div>
           <div>
             <h1 className="text-sm font-bold tracking-tight">
-              <span className="text-portal-purple">Git Worktree:</span>{' '}
-              <span className="text-gray-300">The Multiverse</span>
+              <span className="text-portal-purple">Git Worktree</span>{' '}
+              <span className="text-gray-300">Playground</span>
             </h1>
             <p className="text-[10px] text-gray-600 font-mono">
-              Multiverse Agency // Training Simulator
+              Learn by doing // Interactive sandbox
             </p>
           </div>
         </div>
@@ -75,7 +75,7 @@ function App() {
       {/* Footer */}
       <footer className="shrink-0 flex items-center justify-center px-6 py-2 border-t border-gray-800/40 bg-gray-950">
         <span className="text-[10px] text-gray-700 font-mono">
-          Built to teach git worktree // Open Source // No real git was harmed in this simulation
+          Safe sandbox — no real git repo is affected // Open Source
         </span>
       </footer>
     </div>
